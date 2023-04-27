@@ -17,6 +17,7 @@ app.use('/principal', rotaPrincipal);
 app.use('/pets', rotaPets);
 app.use('/user', rotaUsers);
 
+
 //Tratamento quando não encontra a rota, retorna mensagem de erro
 app.use((req, res, next) =>{
     const erro = new Error('Rota não encontrada');
