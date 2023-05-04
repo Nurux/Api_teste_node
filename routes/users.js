@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const rota = express.Router();
 const mysql = require('../conections/conect_db').connection
 
-rota.post('/cadastro/:email/:senha', (req, res) => {
+rota.post('/cadastro', (req, res) => {
     mysql.getConnection((err, cnx) => {
         if(err){
             return res.status(500).send({
@@ -12,7 +12,7 @@ rota.post('/cadastro/:email/:senha', (req, res) => {
             })
         }
 
-        cnx.query('Select * From usuario Where email = ?', [req.params.email], (err, results) => {
+        cnx.query('Select * From usuario Where email = ?', [req.body.email], (err, results) => {
             if(err){
                 return res.status(500).send({error: err})
             }
@@ -20,14 +20,14 @@ rota.post('/cadastro/:email/:senha', (req, res) => {
             if(results.length > 0){
                 res.status(409).send({ mensagem: 'Usuario já cadastrado' })
             }else {
-                bcrypt.hash(req.params.senha, 10, (errBcrypt, hash) => {
+                bcrypt.hash(req.body.senha, 10, (errBcrypt, hash) => {
                     if(errBcrypt){
                         return res.status(500).send({error: errBcrypt})
                     }
         
                     cnx.query(
                         'Insert into usuario(email, senha) Values(?,?)',
-                        [req.params.email, hash],
+                        [req.body.email, hash],
             
                         (error, resultado, field) =>{
                             cnx.release()
@@ -42,7 +42,7 @@ rota.post('/cadastro/:email/:senha', (req, res) => {
                             const response = {
                                 mensagem: 'Usuario criado com sucesso',
                                 id_usuario: resultado.insertId,
-                                email: req.params.email
+                                email: req.body.email
                             }
         
                             res.status(201).send(response)
@@ -54,13 +54,13 @@ rota.post('/cadastro/:email/:senha', (req, res) => {
     })
 })
 
-rota.post('/login/:email/:senha', (req, res) => {
+rota.post('/login', (req, res) => {
     mysql.getConnection((err, cnx) => {
         if(err){ return res.status(500).send({ error: err }) }
 
         const query = 'Select * From usuario Where email = ?';
 
-        cnx.query(query,[req.params.email], (err, results) => {
+        cnx.query(query,[req.body.email], (err, results) => {
             cnx.release();
 
             if(err){
@@ -71,7 +71,7 @@ rota.post('/login/:email/:senha', (req, res) => {
                 return res.status(401).send({ mensagem: 'falha na autenticação'})
             }
 
-            bcrypt.compare(req.params.senha, results[0].senha, (err, result) =>{
+            bcrypt.compare(req.body.senha, results[0].senha, (err, result) =>{
                 if(err){
                     return res.status(401).send({mensagem: 'Falha na autenticação'})
                 }

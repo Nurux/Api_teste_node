@@ -2,18 +2,14 @@ const express = require('express');
 const app = express();
 
 
-//importa um rota
-const rotaPrincipal = require('./routes/landpage');
+//importa um rota 
 const rotaPets = require('./routes/pets');
 const rotaUsers = require('./routes/users');
 
 app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
-
-
+app.use(express.json())
 
 //coloca a rota importada dentro do app passando o endpoint de acesso
-app.use('/principal', rotaPrincipal);
 app.use('/pets', rotaPets);
 app.use('/user', rotaUsers);
 
