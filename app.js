@@ -9,6 +9,9 @@ const rotaUsers = require('./routes/users');
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 
+app.use(express.static(__dirname + '/tmp'));
+app.use('./tmp', express.static('tmp'));
+
 //coloca a rota importada dentro do app passando o endpoint de acesso
 app.use('/pets', rotaPets);
 app.use('/user', rotaUsers);
