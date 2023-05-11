@@ -35,7 +35,7 @@ let auth = Flickr.OAuth.createPlugin(
 
 
 rota.post('/', upload.single('img_animal'), Login, (req, res) => {
-    let upload = new Flickr.Upload(auth, './img/' + filename);
+    let upload = new Flickr.Upload(auth, _dirname + '/img/' + filename);
 
     upload.then((response) => {
         let url  =  `https://www.flickr.com/photos/198359414@N08/` + response.body.photoid._content;
