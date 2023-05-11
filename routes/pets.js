@@ -15,7 +15,7 @@ let filename = ''
 
 const obj_storage = multer.diskStorage({
     destination: (req, file, cb) =>{
-        cb(null, __dirname + '/img');
+        cb(null, __dirname + '/tmp');
     },
     filename: (req, file, cb) => {
         filename = file.originalname;
@@ -35,12 +35,12 @@ let auth = Flickr.OAuth.createPlugin(
 
 
 rota.post('/', upload.single('img_animal'), Login, (req, res) => {
-    let upload = new Flickr.Upload(auth, __dirname + '/img/' + filename);
+    let upload = new Flickr.Upload(auth, __dirname + '/tmp/' + filename);
    
     upload.then((response) => {
         let url  =  `https://www.flickr.com/photos/198359414@N08/` + response.body.photoid._content;
         
-        fs.unlink( __dirname + '/img/' + filename, (err)=>{
+        fs.unlink( __dirname + '/tmp/' + filename, (err)=>{
             if (err) throw err;
             console.log('imagem deletada');
         });
