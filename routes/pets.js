@@ -40,7 +40,7 @@ rota.post('/', upload.single('img_animal'), Login, (req, res) => {
     upload.then((response) => {
         let url  =  `https://www.flickr.com/photos/198359414@N08/` + response.body.photoid._content;
         
-        fs.unlink( './img/' + filename, (err)=>{
+        fs.unlink( __dirname + '/img/' + filename, (err)=>{
             if (err) throw err;
             console.log('imagem deletada');
         });
