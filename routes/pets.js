@@ -36,14 +36,14 @@ let auth = Flickr.OAuth.createPlugin(
 
 rota.post('/', upload.single('img_animal'), Login, (req, res) => {
     let upload = new Flickr.Upload(auth, __dirname + '/img/' + filename);
-
+   
     upload.then((response) => {
         let url  =  `https://www.flickr.com/photos/198359414@N08/` + response.body.photoid._content;
         
-        fs.unlink( __dirname + '/img/' + filename, (err)=>{
-            if (err) throw err;
-            console.log('imagem deletada');
-        });
+        // fs.unlink( __dirname + '/img/' + filename, (err)=>{
+        //     if (err) throw err;
+        //     console.log('imagem deletada');
+        // });
 
         mysql.getConnection((error,cnx)=>{
             if(error){  return  res.status(500).send({  error:error }) }
