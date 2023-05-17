@@ -79,38 +79,6 @@ rota.post('/', upload.single('img_animal'), Login, (req, res) => {
     }).catch(function (err) {
         console.log(err)
     }); 
-    
-
-
-    // mysql.getConnection((error,cnx)=>{
-    //     if(error){  return  res.status(500).send({  error:error }) }
-    //     cnx.query(
-    //         'Insert into post(nome, raca, crt, visto, img) values(?, ?, ?, ?)',
-    //         [req.body.nome, req.body.raca, req.body.crt, req.body.visto, url],
-            
-    //         (error, resultado, field) => {
-    //             cnx.release()
-
-    //             if(error){
-    //                 return res.status(500).send({
-    //                     error: error,
-    //                     response: null
-    //                 })
-    //             }
-
-    //             const response = {
-    //                 mensagem: 'Post Criado!',
-    //                 id_post: resultado.insertId,
-    //                 nome: req.body.nome,
-    //                 raca: req.body.raca,
-    //                 crt: req.body.ctr,
-    //                 visto: req.body.visto
-    //             }
-
-    //             res.status(201).send(response)
-    //         }
-    //     )
-    // })
 })
 
 rota.get('/', (req, res) => {
