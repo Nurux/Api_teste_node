@@ -5,10 +5,10 @@ const Login = require('../middleware/login')
 const multer = require('multer');
 
 const Flickr = require('flickr-sdk');
-const flickr_key = '44c85ca6294965dc7039188492ab3c8b';
-const flickr_secret = '79ae6216da1b70e5';
-const usage_token = '72157720881860167-2db920473aee8c1c';
-const usage_secret = '5a078579adb6648a';
+const flickr_key = process.env.FLICKRKEY;
+const flickr_secret = process.env.FLICKRSECRET;
+const usage_token = process.env.FLICKRTOKEN;
+const usage_secret = process.env.FLICKRTOKENSECRET;
 
 const fs = require('fs');
 let filename = ''
