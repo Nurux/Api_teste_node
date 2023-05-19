@@ -8,7 +8,7 @@ const Flickr = require('flickr-sdk');
 const flickr_key = process.env.FLICKRKEY;
 const flickr_secret = process.env.FLICKRSECRET;
 const usage_token = process.env.FLICKRTOKEN;
-const usage_secret = process.env.FLICKRTOKENSECRET;
+const usage_tk_secret = process.env.FLICKRTOKENSECRET;
 
 const fs = require('fs');
 let filename = ''
@@ -29,7 +29,7 @@ let auth = Flickr.OAuth.createPlugin(
     flickr_key,
     flickr_secret,
     usage_token,
-    usage_secret
+    usage_tk_secret
 );
 
 
