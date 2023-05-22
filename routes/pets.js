@@ -48,8 +48,8 @@ rota.post('/', upload.single('img_animal'), Login, (req, res) => {
         mysql.getConnection((error,cnx)=>{
             if(error){  return  res.status(500).send({  error:error }) }
             cnx.query(
-                'Insert into post(nome, raca, crt, visto, img) values(?, ?, ?, ?, ?)',
-                [req.body.nome, req.body.raca, req.body.crt, req.body.visto, url],
+                'Insert into post(nome, raca, crt, visto, adocao, img) values(?, ?, ?, ?, ?, ?)',
+                [req.body.nome, req.body.raca, req.body.crt, req.body.visto, req.body.adocao, url],
                 
                 (error, resultado, field) => {
                     cnx.release()
@@ -106,11 +106,42 @@ rota.get('/', (req, res) => {
                             raca: post.raca,
                             crt: post.crt,
                             visto: post.visto,
+                            adocao: post.adocao
                         }
                     })
                 }
 
                 res.status(200).send(response)
+            }
+        )
+    })
+})
+
+rota.get('/adote', (req, res) => {
+    mysql.getConnection((error, cnx) => {
+        if(error){res.status(500).send({error: error})}
+
+        cnx.query(
+            'Select * from post Where adocao = 1',
+            (err, result, field) => {
+                cnx.release()
+                
+                if(err){res.status(500).send({error: err})}
+
+                const responde = {
+                    posts: result.map(post =>{
+                        return {
+                            id_post: post.id_post,
+                            img: post.img,
+                            nome: post.nome,
+                            raca: post.raca,
+                            crt: post.crt,
+                            visto: post.visto,
+                        }
+                    })
+                }
+
+                res.status(200).send(responde)
             }
         )
     })
