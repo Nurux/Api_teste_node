@@ -46,7 +46,7 @@ rota.post('/', upload.single('img_animal'), Login, (req, res) => {
             
             let url  =  `https://live.staticflickr.com/${rest.body.photo.server}/${rest.body.photo.id}_${rest.body.photo.secret}.jpg`
             
-            fs.unlink('tmp/' + filename, (err)=>{
+            fs.unlink('/tmp/' + filename, (err)=>{
                 if (err) throw err;
                 console.log('imagem deletada');
             });
