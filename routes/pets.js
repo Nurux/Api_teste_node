@@ -38,44 +38,50 @@ rota.post('/', upload.single('img_animal'), Login, (req, res) => {
     let upload = new Flickr.Upload(auth, '/tmp/' + filename);
    
     upload.then((response) => {
-        let url  =  `https://www.flickr.com/photos/198359414@N08/` + response.body.photoid._content;
-        
-        fs.unlink('/tmp/' + filename, (err)=>{
-            if (err) throw err;
-            console.log('imagem deletada');
-        });
+        var flickr = new Flickr(flickr_key);
 
-        mysql.getConnection((error,cnx)=>{
-            if(error){  return  res.status(500).send({  error:error }) }
-            cnx.query(
-                'Insert into post(nome, raca, crt, visto, adocao, img) values(?, ?, ?, ?, ?, ?)',
-                [req.body.nome, req.body.raca, req.body.crt, req.body.visto, req.body.adocao, url],
-                
-                (error, resultado, field) => {
-                    cnx.release()
+        flickr.photos.getInfo({
+            photo_id: response.body.photoid._content
+        }).then(function (rest) {
+            
+            let url  =  `https://live.staticflickr.com/${rest.body.photo.server}/${rest.body.photo.id}_${rest.body.photo.secret}.jpg`
+            
+            fs.unlink('tmp/' + filename, (err)=>{
+                if (err) throw err;
+                console.log('imagem deletada');
+            });
     
-                    if(error){
-                        return res.status(500).send({
-                            error: error,
-                            response: null
-                        })
-                    }
-    
-                    const response = {
-                        mensagem: 'Post Criado!',
-                        id_post: resultado.insertId,
-                        img: url,
-                        nome: req.body.nome,
-                        raca: req.body.raca,
-                        crt: req.body.crt,
-                        visto: req.body.visto
-                    }
-    
-                    res.status(201).send(response)
-                }
-            )
-        })
+            mysql.getConnection((error,cnx)=>{
+                if(error){  return  res.status(500).send({  error:error }) }
+                cnx.query(
+                    'Insert into post(nome, raca, crt, visto, adocao, img) values(?, ?, ?, ?, ?, ?)',
+                    [req.body.nome, req.body.raca, req.body.crt, req.body.visto, req.body.adocao, url],
+                    
+                    (error, resultado, field) => {
+                        cnx.release()
         
+                        if(error){
+                            return res.status(500).send({
+                                error: error,
+                                response: null
+                            })
+                        }
+        
+                        const response = {
+                            mensagem: 'Post Criado!',
+                            id_post: resultado.insertId,
+                            img: url,
+                            nome: req.body.nome,
+                            raca: req.body.raca,
+                            crt: req.body.crt,
+                            visto: req.body.visto
+                        }
+        
+                        res.status(201).send(response)
+                    }
+                )
+            })
+        })
     }).catch(function (err) {
         console.log(err)
     }); 
