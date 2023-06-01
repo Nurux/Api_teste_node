@@ -153,6 +153,36 @@ rota.get('/adote', (req, res) => {
     })
 })
 
+rota.get('/encontrado', (req, res) => {
+    mysql.getConnection((error, cnx) => {
+        if(error){res.status(500).send({error: error})}
+
+        cnx.query(
+            'Select * from post Where adocao = 2',
+            (err, result, field) => {
+                cnx.release()
+                
+                if(err){res.status(500).send({error: err})}
+
+                const responde = {
+                    posts: result.map(post =>{
+                        return {
+                            id_post: post.id_post,
+                            img: post.img,
+                            nome: post.nome,
+                            raca: post.raca,
+                            crt: post.crt,
+                            visto: post.visto,
+                        }
+                    })
+                }
+
+                res.status(200).send(responde)
+            }
+        )
+    })
+})
+
 rota.patch('/', Login, (req, res) => {
     mysql.getConnection((error, cnx) => {
         if(error){  return res.status(500).send({   error: error  })  }
