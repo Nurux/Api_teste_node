@@ -1,11 +1,13 @@
 const express = require('express');
 const app = express();
+const cors = require('cors');
 
 
 //importa um rota 
 const rotaPets = require('./routes/pets');
 const rotaUsers = require('./routes/users');
 
+app.use(cors())
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json())
 
