@@ -183,6 +183,25 @@ rota.get('/encontrado', (req, res) => {
     })
 })
 
+rota.put('/mudar', Login, (req, res) => {
+    mysql.getConnection((error, cnx) => {
+        if(error){  return res.status(500).send({   error: error  })  }
+
+        cnx.query(
+            'Update post Set adocao = ? Where id_post = ?',
+            [req.body.adocao, req.body.id],
+            (error, resultado, field) => {
+                cnx.release()
+                if(error){  return res.status(500).send({   error: error  })}
+                
+                res.status(202).send({
+                    mensagem: "Post do animal atualizado"
+                })
+            }
+        )
+    })
+})
+
 rota.patch('/', Login, (req, res) => {
     mysql.getConnection((error, cnx) => {
         if(error){  return res.status(500).send({   error: error  })  }
