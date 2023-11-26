@@ -3,14 +3,14 @@
     "name": "Api_node",
     "builds": [
         {
-            "src": "main.js",
+            "src": "server.js",
             "use": "@vercel/node"
         }
     ],
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "/main.js"
+            "dest": "/server.js"
         }
     ]
 }
